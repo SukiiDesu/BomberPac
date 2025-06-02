@@ -7,7 +7,7 @@
 	beqz t0,FIM_ZERO			# Se ultimo bit de t0 == 1: Tecla nova foi lida -> Guarda e ecoa tecla; 0 : Nao foi lida nenhuma tecla->Encerra
 	lw t0,4(t1)				# Pegue o conteudo da nova tecla lida
 	mv %reg,t0				# Salva o conteudo de t0 no registrador passado como argumento
-	# sw t0,12(t1)				Ecoa a tecla lida no display do KDMMIO
+	# sw t0,12(t1)				# Ecoa a tecla lida no display do KDMMIO
 	j FIM					# Sai da funcao com retorno diferente de 0
 FIM_ZERO:
 	li %reg,0				# Como nenhum caractere foi lido, "retorne 0" : "Nao faca nada"
