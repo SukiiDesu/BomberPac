@@ -6,7 +6,7 @@
 # [x] Pool do teclado
 ########################################################
 #                       OUTPUT
-# [] Integrar Bitmap Display
+# [x] Integrar Bitmap Display
 # [] Desenhar uma linha
 # [] Preencher uma matriz (linhas empilhadas)
 ########################################################
@@ -40,7 +40,7 @@
 #.include ".\macros\MENU.s"
 .include ".\macros\TECLADO.s"
 #.include ".\macros\ATUALIZA_FRAME.s"
-#.include ".\macros\RENDERIZA.s"
+.include ".\macros\RENDERIZA.s"
 #.include ".\macros\MUSICA.s"
 
 ########################################################
@@ -50,7 +50,8 @@
 	.eqv ENDERECO_CONTROLE_TECLADO 0xFF200000		# Endereco de Controle KDMMIO
 	.eqv ENDERECO_TECLA_LIDA 0xFF200004			# Endereco de Armazenamento KDMMIO
 	.eqv ENDERECO_DISPLAY_TECLADO 0xFF20000C		# Endereco de Echo KDMMIO
-	#.eqv ENDERECO_INICIAL_FRAME0 0xFF000000			# Endereco inicial : [0,0] do Frame 0
+	.eqv ENDERECO_INICIAL_FRAME0 0xFF000000			# Endereco inicial : [0,0] do Frame 0
+	VERDE: .word 0x10101010
 	#.eqv ENDERECO_INICIAL_FRAME1 0xFF100000			# Endereco inicial : [0,0] do Frame 1
 	#.eqv ENDERECO_INICIAL_PERSONAGEM ""			# Endereco inicial : [0,0] da "matriz" Personagem
 	#.eqv ENDERECO_INICIAL_MOB1 ""
@@ -60,7 +61,7 @@
 	#.eqv SCORE s1
 	#.eqv TEMPO s2
 	#.eqv VIDAS s3
-	#.eqv INIMIGOS_VIVOS s4  #Condicao de vitoria : saida do nivel
+	#.eqv INIMIGOS_VIVOS s4  # Condicao de vitoria : saida do nivel
 .text
 MAIN:
 
@@ -74,13 +75,16 @@ MAIN:
 				####
 LOOP:	
 	# Pegue Input : Tecla pressionada
-	Le_Tecla_Non_Blocking(s0)	# Chama funcao de leitura do KDMMIO e guarda a reposta, se houver, em s0
-	#Escreva_ASCII_no_Console(s0) 	# Escreve um valor ASCII no console. Caso s0==0 nao escreve nada
+		#Le_Tecla_Non_Blocking(s0)	# Chama funcao de leitura do KDMMIO e guarda a reposta, se houver, em s0
+		#Escreva_ASCII_no_Console(s0) 	# Escreve um valor ASCII no console. Caso s0==0 nao escreve nada
 	
 	# Atualize o frame		# Alternar entre atualizar o 0 e o 1????
 		####
 	# Renderiza frame
-		####
+		#la s5,LABEL			#Pegue endereco da imagem : essa word VERDE eh apenas para teste
+		#li s4,ENDERECO_INICIAL_FRAME0
+		#Desenha_Imagem(s4, s5, 0x12C00)
+	
 	# Toca musica : Uma nota por vez atraves do macete da funcao TIME()
 		####
 	j LOOP				# Retorna para o Game Loop
