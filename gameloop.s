@@ -52,21 +52,22 @@
 	.eqv ENDERECO_DISPLAY_TECLADO 0xFF20000C		# Endereco de Echo KDMMIO
 	.eqv ENDERECO_INICIAL_FRAME0 0xFF000000			# Endereco inicial : [0,0] do Frame 0
 	VERDE: .word 0x10101010
-	#.eqv ENDERECO_INICIAL_FRAME1 0xFF100000			# Endereco inicial : [0,0] do Frame 1
-	#.eqv ENDERECO_INICIAL_PERSONAGEM ""			# Endereco inicial : [0,0] da "matriz" Personagem
-	#.eqv ENDERECO_INICIAL_MOB1 ""
-	#.eqv ENDERECO_INICIAL_MOB2 ""
-	#.eqv ENDERECO_INICIAL_BOSS ""
-	#.eqv DIRECAO s0	#Recebe WASD/SPACE BAR/P - P eh a cheat code para pular de nivel
+	#.eqv ENDERECO_INICIAL_FRAME1 0xFF100000		# Endereco inicial : [0,0] do Frame 1
+	#.eqv DIRECAO s0	#Recebe WASD/SPACE BAR/P/L/M - P eh a cheat code para pular de nivel, L - limpa todos os blocos, M - mata os inimigos
 	#.eqv SCORE s1
 	#.eqv TEMPO s2
 	#.eqv VIDAS s3
-	#.eqv INIMIGOS_VIVOS s4  # Condicao de vitoria : saida do nivel
+	#.eqv INIMIGOS_VIVOS s4  	# Condicao de vitoria : saida do nivel
+	#.eqv CENTRO_PERSONAGEM s7	#Nesse endereco sera guardado o centro do personagem
+	#.eqv CENTRO_MOB1 s8		#Nesse endereco sera guardado o centro do mob1
+	#.eqv CENTRO_MOB2 s9		#Nesse endereco sera guardado o centro do mob2
+	#.eqv CENTRO_BOSS s10		#Nesse endereco sera guardado o centro do boss
+
 .text
 MAIN:
 
 		
-#CONDIFURA:	# Seta Configuracoes a depender da Dificuldade / Fase	
+#CONFIFURA:	# Seta Configuracoes a depender da Dificuldade / Fase	
 			# Inicializa contadores
 				####	
 			# Inicializa enderecos iniciais
@@ -81,10 +82,7 @@ LOOP:
 	# Atualize o frame		# Alternar entre atualizar o 0 e o 1????
 		####
 	# Renderiza frame
-		#la s5,LABEL			#Pegue endereco da imagem : essa word VERDE eh apenas para teste
-		#li s4,ENDERECO_INICIAL_FRAME0
-		#Desenha_Imagem(s4, s5, 0x12C00)
-	
+		####
 	# Toca musica : Uma nota por vez atraves do macete da funcao TIME()
 		####
 	j LOOP				# Retorna para o Game Loop
