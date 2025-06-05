@@ -83,6 +83,12 @@
 # T - Tempo em segundos
 # C - Campo
 
+# Os valores dos tres campos acima variam de a ate j
+# a == 0, b == 1, c == 2, d == 3, e == 4, f == 5, g == 6, h == 7, i == 8, j == 9
+# A ideia eh associar cada letra ao sprite do respectivo algarismo (exige algoritmo para "percorrer algarismos")
+
+# Sei que pode ficar confuso representar numeros com letras, mas isso eh alteravel de acordo com a conveniencia/necessidade 
+
 ########################################################
 #                     MAIN
 ########################################################
