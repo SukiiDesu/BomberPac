@@ -76,7 +76,7 @@
 #.end_macro
 
 # Renderiza uma matriz do campo : reg1 = endereco atual do frame, reg2 = endereco da label inicial da matriz : Tente que testar
-#.macro RENDERIZA_MATRIZ(%reg1, %reg2)
+#.macro PRINTA_SPRITE(%reg1, %reg2)
 	#mv t0,%reg1		# t0 = endereco atual do frame
 
 	#li s5,0(%reg2)		# Comprimento da matriz
@@ -89,7 +89,7 @@
 			#li t3,0			# Coluna_atual = 0
 #LOOP_COLUNA: beq t3,s6,SOMA_LINHA
 			#lw t4,0(%reg2)			# Pega 4 pixels (bytes) da imagem
-			#sw t4,0(t0)				# Renderiza 4 pixels (bytes) no frame
+			#sw t4,0(t0)			# Renderiza 4 pixels (bytes) no frame
 			#addi %reg2, %reg2, 4	# Passa para os proximos 4 bytes na imagem
 			#addi t0,t0,4			# Passa para os proximos 4 bytes no frame
 			#addi t3, t3, 1 		# coluna++
