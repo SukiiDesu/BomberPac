@@ -41,7 +41,7 @@
 .include ".\macros\TECLADO.s"
 #.include ".\macros\ATUALIZA_FRAME.s"
 .include ".\macros\RENDERIZA.s"
-#.include ".\macros\MUSICA.s"
+.include ".\macros\MUSICA.s"
 
 ########################################################
 #                  MAIN (GAME LOOP)
