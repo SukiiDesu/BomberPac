@@ -52,7 +52,7 @@ FIM_TOCA_MUSICA:
 .data
 # Numero de Notas a tocar
 TAMANHO_MUSICA: .word 13
-# lista de nota,duração,nota,duração,nota,duração,...
+# lista de nota,dura??o,nota,dura??o,nota,dura??o,...
 NOTAS: 69,500,76,500,74,500,76,500,79,600, 76,1000,0,1200,69,500,76,500,74,500,76,500,81,600,76,1000
 
 .include "..\sons\musica_fundo.data"
@@ -73,7 +73,7 @@ LOOP_MUSICAL:
 	j LOOP_MUSICAL
 
 FIM:	li a0,40		# define a nota
-	li a1,1500		# define a duração da nota em ms
+	li a1,1500		# define a dura??o da nota em ms
 	li a2,127		# define o instrumento
 	li a3,127		# define o volume
 	li a7,33		# define o syscall
