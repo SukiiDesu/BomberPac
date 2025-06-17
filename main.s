@@ -1,50 +1,60 @@
 .data
-	.include "variaveis.data"
+	.include "variaveis.data"	# Arquivo que contem todas as variaveis - mapas, posicoes, etc - usadas no jogo
 
 .text
-	la s2, TILEMAP_MUTAVEL
-	addi s2, s2, -1
-	li t0, 0	# Primeira matriz do tilemap
-	li t1, 299	# Ultima matriz do tilemap
+	la s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
+	addi s2, s2, -1		# Essa correcao permite que o LOOP_TILEMAP sempre funcione com iterando o endereco do byte do tilemap
+	li t0, 0		# Primeira matriz do tilemap
+	li t1, 299		# Ultima matriz do tilemap
+# Loop que percorre todo o Tilemap. Da esquerda para direita, de cima para baixo e byte a byte.
 LOOP_TILEMAP:
-	bgt t0, t1, FIM
-		lui t4, 0xFF000
+	bgt t0, t1, FIM		# Enquanto t0 < ultima matriz do tilemap, faca o abaixo
+		lui t4, 0xFF000	# Carrega os 20 bits mais a esquerda de t4 com ENDERECO_INICIAL_FRAME : Nesse caso do Frame 0
 	
-		# 0xFF00 + 5120 * t0 // 20
-		li t2, 20
-		div t2, t0, t2
-		li t3, 5120
-		mul t2, t3, t2
-		add t4, t4, t2
+		# As contas abaixo objetivam gerar uma correspondencia direta entre a posicao no Tilemap (t0) e no Frame (Endereco em t4)
+	
+		# 0xFF00 + 5120 * t0 // 20 : 
+		li t2, 20	# Pegue o valor 20: Quantidade de colunas no Tilemap
+		div t2, t0, t2	# t2 = t0 // 20	: isto eh quantidade de linhas que ja foram processadas no tilemap
+		li t3, 5120	# Pegue o valor de 5120 que eh 16 * 320 que equivale a pular 16 linhas para baixo no frame
+		mul t2, t3, t2	# t2 = 5120 * t0 // 20 : isto eh quantidade pixels em linha que devem ser pulados
+		add t4, t4, t2	# Acrescente ao endereco inicial do Frame
 		
 		# [0xFF00 + 5120 * t0 // 20] + 16 * (t0 % 20)
-		li t2, 20
-		rem t2, t0, t2
-		li t3, 16
-		mul t2, t3, t2
-		add t4, t4, t2
+		li t2, 20	# Pegue o valor 20: Quantidade de colunas no Tilemap
+		rem t2, t0, t2	# Pegue o resto da divisao de t0 % 20 : Colunas restantes a serem contabilizadas
+		li t3, 16	# 16 eh o tamanho de colunas em um matriz
+		mul t2, t3, t2	# 16 * (t0 % 20) gera o valor em endereco correspondente a quantidade de matriz passadas na matriz
+		add t4, t4, t2	# Acrescente ao endereco calculado ate agora
 
-		addi s2, s2, 1
+		addi s2, s2, 1	# Itere o endereco do byte no tilemap
 		lb t5, 0(s2)	# Valor da matriz no Tilemap
+		
+# Os casos abaixos pegam a imagem que deve ser printada
 CASO_0:
-		li t2, 0
-		bne t5, t2, CASO_1
-		la t5, IMAGEM_0
-		j PREENCHE_MATRIZ
+		li t2, 0		# Pegue o valor 0
+		bne t5, t2, CASO_1	# Compare com o valor no byte atual do Tilemap
+		la t5, IMAGEM_0		# Se o byte atual == 0, pegue a imagem_0
+		j PREENCHE_MATRIZ	# Printa a matriz do byte atual
 CASO_1:
-		li t2, 1
-		bne t5, t2, ITERA_LOOP_TILEMAP
-		la t5, IMAGEM_1
+		li t2, 1			# Pegue o valor 0
+		# O ultimo caso possui uma comparacao oposta dos demais (!= ao inves de ==).
+		bne t5, t2, ITERA_LOOP_TILEMAP	# Compare com o valor no byte atual do Tilemap.
+		la t5, IMAGEM_1			# Se o byte atual == 1, pegue a imagem_1
 
+# Matriz eh um conjunto de 16x16 pixels
+# O loop abaixo printa o valor da imagem correspondente a matriz byte do tilemap
 PREENCHE_MATRIZ:
 		# Inicializa linha e ultima linha
-		li s0, 0
-		li s1, 16
+		li s0, 0	# Linha inicial = 0
+		li s1, 16	# Linha final = 16
+# Loop para printar cada linha da matriz
 LOOP_LINHAS_MATRIZ:
-	beq s0, s1, ITERA_LOOP_TILEMAP
+	beq s0, s1, ITERA_LOOP_TILEMAP	# Enquanto i < 16, faca o abaixo
 		# Inicializa coluna e ultima coluna
-		li t2, 0	# Coluna inicial
+		li t2, 0	# Coluna inicial = 0
 		li t3, 15	# t3 = numero de colunas
+	# Loop para printar cada pixel (coluna) de uma linha da respectiva linha da matriz
 	LOOP_COLUNA:			
 		beq t2,t3,SOMA_LINHA	# Enquanto coluna < 16
 		#PREENCHE_BYTE
@@ -54,19 +64,22 @@ LOOP_LINHAS_MATRIZ:
 		addi t5,t5,1		# Atualiza Endereco atual da imagem em 1 byte
 	
 		addi t2,t2,1		# coluna++
-		j LOOP_COLUNA			
-				
+		j LOOP_COLUNA		# Retorne para a verificacao do Loop das Colunas
+
+# Etapa de iteracao da linha e de correcao do pixel inicial				
 SOMA_LINHA:
 	addi s0, s0, 1	# linha ++
 	addi t5, t5, 1	# Proxima linha do Tilemap
 	
-	#  Inicio proxima linha
-	addi t4, t4, -15
-	addi t4, t4, 320
+	# Inicia proxima linha
+	addi t4, t4, -15	# Retorne ao primeiro pixel da linha
+	addi t4, t4, 320	# Passe para a linha abaixo
 	
-	j LOOP_LINHAS_MATRIZ
-		
+	j LOOP_LINHAS_MATRIZ	# Retorne para a verificacao do Loop das Linhas Matriz
+
+# Etapa de iteracao do byte no Tilemap		
 ITERA_LOOP_TILEMAP:
 		addi t0, t0, 1	# t0++
-		j LOOP_TILEMAP 
-FIM:
+		j LOOP_TILEMAP # Retorne para a verificacao do Loop que percorre o Tilemap
+# Fim do programa
+FIM:	
