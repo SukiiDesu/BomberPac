@@ -53,7 +53,7 @@ LOOP_LINHAS_MATRIZ:
 	beq s0, s1, ITERA_LOOP_TILEMAP	# Enquanto i < 16, faca o abaixo
 		# Inicializa coluna e ultima coluna
 		li t2, 0	# Coluna inicial = 0
-		li t3, 15	# t3 = numero de colunas
+		li t3, 16	# t3 = numero de colunas
 	# Loop para printar cada pixel (coluna) de uma linha da respectiva linha da matriz
 	LOOP_COLUNA:			
 		beq t2,t3,SOMA_LINHA	# Enquanto coluna < 16
@@ -69,10 +69,9 @@ LOOP_LINHAS_MATRIZ:
 # Etapa de iteracao da linha e de correcao do pixel inicial				
 SOMA_LINHA:
 	addi s0, s0, 1	# linha ++
-	addi t5, t5, 1	# Proxima linha do Tilemap
 	
 	# Inicia proxima linha
-	addi t4, t4, -15	# Retorne ao primeiro pixel da linha
+	addi t4, t4, -16	# Retorne ao primeiro pixel da linha
 	addi t4, t4, 320	# Passe para a linha abaixo
 	
 	j LOOP_LINHAS_MATRIZ	# Retorne para a verificacao do Loop das Linhas Matriz
