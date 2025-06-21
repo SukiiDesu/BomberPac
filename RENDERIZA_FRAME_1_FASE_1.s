@@ -29,28 +29,33 @@ LOOP_TILEMAP_FRAME_1_FASE_1:
 
 		addi s2, s2, 1	# Itere o endereco do byte no tilemap
 		lb t5, 0(s2)	# Valor da matriz no Tilemap
-		
-# Os casos abaixos pegam a imagem que deve ser printada
-CASO_0_FRAME_1_FASE_1:
-		li t2, 0		# Pegue o valor 0
-		bne t5, t2, CASO_1_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap
-		la t5, IMAGEM_0		# Se o byte atual == 0, pegue a imagem_0
-		j PREENCHE_MATRIZ_FRAME_1_FASE_1	# Printa a matriz do byte atual
-CASO_1_FRAME_1_FASE_1:
+
 		li t2, 1		# Pegue o valor 0										
-		bne t5, t2, CASO_2_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap
+		bne t5, t2, ITERA_LOOP_TILEMAP_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap.
 		la t5, IMAGEM_1		# Se o byte atual == 1, pegue a imagem_1
 		j PREENCHE_MATRIZ_FRAME_1_FASE_1	# Printa a matriz do byte atual
-CASO_2_FRAME_1_FASE_1:
-		li t2, 2		# Pegue o valor 0
-		bne t5, t2, CASO_3_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap
-		la t5, IMAGEM_2		# Se o byte atual == 2, pegue a imagem_2
-		j PREENCHE_MATRIZ_FRAME_1_FASE_1	# Printa a matriz do byte atual							
-CASO_3_FRAME_1_FASE_1:
-		li t2, 3			# Pegue o valor 0
-		# O ultimo caso possui uma comparacao oposta dos demais (!= ao inves de ==).
-		bne t5, t2, ITERA_LOOP_TILEMAP_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap.
-		la t5, IMAGEM_3			# Se o byte atual == 3, pegue a imagem_3
+
+# # Os casos abaixos pegam a imagem que deve ser printada
+# CASO_0_FRAME_1_FASE_1:
+# 		li t2, 0		# Pegue o valor 0
+# 		bne t5, t2, CASO_1_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap
+# 		la t5, IMAGEM_0		# Se o byte atual == 0, pegue a imagem_0
+# 		j PREENCHE_MATRIZ_FRAME_1_FASE_1	# Printa a matriz do byte atual
+# CASO_1_FRAME_1_FASE_1:
+# 		li t2, 1		# Pegue o valor 0										
+# 		bne t5, t2, CASO_2_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap
+# 		la t5, IMAGEM_1		# Se o byte atual == 1, pegue a imagem_1
+# 		j PREENCHE_MATRIZ_FRAME_1_FASE_1	# Printa a matriz do byte atual
+# CASO_2_FRAME_1_FASE_1:
+# 		li t2, 2		# Pegue o valor 0
+# 		bne t5, t2, CASO_3_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap
+# 		la t5, IMAGEM_2		# Se o byte atual == 2, pegue a imagem_2
+# 		j PREENCHE_MATRIZ_FRAME_1_FASE_1	# Printa a matriz do byte atual							
+# CASO_3_FRAME_1_FASE_1:
+# 		li t2, 3			# Pegue o valor 0
+# 		# O ultimo caso possui uma comparacao oposta dos demais (!= ao inves de ==).
+# 		bne t5, t2, ITERA_LOOP_TILEMAP_FRAME_1_FASE_1	# Compare com o valor no byte atual do Tilemap.
+# 		la t5, IMAGEM_3			# Se o byte atual == 3, pegue a imagem_3
 
 # Matriz eh um conjunto de 16x16 pixels
 # O loop abaixo printa o valor da imagem correspondente a matriz byte do tilemap
