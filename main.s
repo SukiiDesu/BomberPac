@@ -12,6 +12,13 @@ CONFIGURA_FASE_1:
 	#j FIM_GAME_LOOP_FASE_1
 
 ################################################
+###### Inicializa posicao Jogador ##############
+################################################
+	la t0, POSICAO_JOGADOR
+	li t1, 0
+	sw t1, 0(t0)
+
+################################################
 ###### Inicializa todos os scores ##############
 ################################################
 	.include "INICIALIZA_SCORES.s"
@@ -63,11 +70,11 @@ INICIO_GAME_LOOP_FASE_1:
 	# ecall
 	.include "REDUZ_TIMER.s"
 
-	.include "TECLADO_FASE_1.s"
-
 	####################################
-	# RENDERIZA PERSONAGEM E OBJETOS ? #
+	# RENDERIZAÇOES DINAMICAS #
 	####################################
+		# Renderiza campo
+		# Renderiza personagem
 		# Salvar posicao do personagem como parte do Tilemap
 	############################
 	# FUNCAO ATUALIZA_FRAME.s
@@ -84,6 +91,10 @@ INICIO_GAME_LOOP_FASE_1:
 		###################################################
 		# RENDERIZA CAMPO E PERSONAGEM NO PROXIMO FRAME ? #
 		###################################################
+
+
+	.include "TECLADO_FASE_1.s"
+
 
 	.include "TOCA_MUSICA.s"
 
