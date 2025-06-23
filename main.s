@@ -1,6 +1,6 @@
 .data
 	.include "variaveis.data"	# Arquivo que contem todas as variaveis - mapas, posicoes, etc - usadas no jogo
-	DEBUG_MSG: .string "travou aqui\n"
+	#DEBUG_MSG: .string "Travou aqui\n"
 
 .text
 CONFIGURA_FASE_1:
@@ -10,6 +10,13 @@ CONFIGURA_FASE_1:
 	.include "RENDERIZA_FRAME_0_FASE_1.s"
 	.include "RENDERIZA_FRAME_1_FASE_1.s"
 	#j FIM_GAME_LOOP_FASE_1
+
+################################################
+###### Inicializa Frame a ser renderizado ######
+################################################
+	li t0, 0xFF200604	# Pega endereco de SELECAO_DE_FRAME_EXIBIDO
+	li t1, 0			# Pega o valor 0
+	sw t1, 0(t0)		# O primeiro FRAME a ser mostrado serah o FRAME 0
 
 ################################################
 ###### Inicializa posicao Jogador ##############
@@ -43,9 +50,9 @@ CONFIGURA_FASE_1:
 	li t0, 0
 	sw t0, 0(s2)	# Inicializa: TEMPO_INICIAL_MUSICA = TEMPO_ATUAL
 
-##############################################################
+#############################################################
 # Inicializa as variaveis de usadas na MUSICA ###
-##############################################################
+#############################################################
 
 	# Configura instrumento
 	li a2, 42	# Define que o timbre do instrumento : Nesse caso, um instrumento de cordas qualquer
@@ -62,7 +69,6 @@ CONFIGURA_FASE_1:
 	la t1, TAMANHO_MUSICA				# Pega endereco de TAMANHO_MUSICA
 	sw t0, 0(t1)						# TAMANHO_MUSICA = TAMANHO_MUSICA_FUNDO_FASE_1
 
-
 INICIO_GAME_LOOP_FASE_1:
 
 	# li a7, 4
@@ -70,28 +76,21 @@ INICIO_GAME_LOOP_FASE_1:
 	# ecall
 	.include "REDUZ_TIMER.s"
 
-	####################################
-	# RENDERIZAÇOES DINAMICAS #
-	####################################
-		# Renderiza campo
-		# Renderiza personagem
-		# Salvar posicao do personagem como parte do Tilemap
-	############################
-	# FUNCAO ATUALIZA_FRAME.s
-	############################
+	# ####################################
+	# # RENDERIZAÇOES DINAMICAS #
+	# ####################################
+	.include "RENDERIZA_CAMPO.s"
+	# 	# Renderiza campo
+	# 	# Renderiza personagem
+	# 	# Troca valor no frame de selecao
+	# 	# Salvar posicao do personagem como parte do Tilemap
+	# ############################
+	# # FUNCAO ATUALIZA_FRAME.s
+	# ############################
 
-		############################
-		# ATUALIZA TILEMAP
-		############################
-
-		##########################################################################################################
-		# TROCA FRAME DE SELECAO - O FRAME NAO MOSTRADO DEVE SER RENDERIZADO E DEPOIS DE RENDERIZADO EH MOSTRADO #
-		##########################################################################################################
-
-		###################################################
-		# RENDERIZA CAMPO E PERSONAGEM NO PROXIMO FRAME ? #
-		###################################################
-
+	# 	############################
+	# 	# ATUALIZA TILEMAP
+	# 	############################
 
 	.include "TECLADO_FASE_1.s"
 
