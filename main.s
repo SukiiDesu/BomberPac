@@ -1,6 +1,6 @@
 .data
 	.include "variaveis.data"	# Arquivo que contem todas as variaveis - mapas, posicoes, etc - usadas no jogo
-	#DEBUG_MSG: .string "Travou aqui\n"
+	DEBUG_MSG: .string "Travou aqui\n"
 
 .text
 CONFIGURA_FASE_1:
@@ -22,7 +22,7 @@ CONFIGURA_FASE_1:
 ###### Inicializa posicao Jogador ##############
 ################################################
 	la t0, POSICAO_JOGADOR
-	li t1, 0
+	li t1, 41
 	sw t1, 0(t0)
 
 ################################################
@@ -80,20 +80,22 @@ INICIO_GAME_LOOP_FASE_1:
 	# # RENDERIZAÇOES DINAMICAS #
 	# ####################################
 	.include "RENDERIZA_CAMPO.s"
-	# 	# Renderiza campo
-	# 	# Renderiza personagem
-	# 	# Troca valor no frame de selecao
-	# 	# Salvar posicao do personagem como parte do Tilemap
-	# ############################
-	# # FUNCAO ATUALIZA_FRAME.s
-	# ############################
+	.include "RENDERIZA_JOGADOR.s"
 
-	# 	############################
-	# 	# ATUALIZA TILEMAP
-	# 	############################
-
+	# Troca/Inverte Frames
+	li t0, 0xFF200604	# Pega endereco de SELECAO_DE_FRAME_EXIBIDO
+	lw t1, 0(t0)		# Pega o valor 0
+	xori t1, t1, 1		# Se Frame atual == 0, alterna para o frame 1 e vice-versa
+	sw t1, 0(t0)		# Atualiza o valor de SELECAO_DE_FRAME_EXIBIDO
+	
 	.include "TECLADO_FASE_1.s"
 
+	# ############################
+	# # FUNCAO ATUALIZA_TILEMAP
+	# ############################
+	# A posicao do personagem eh salva como parte do Tilemap
+
+	.include "ATUALIZA_TILEMAP.s"
 
 	.include "TOCA_MUSICA.s"
 

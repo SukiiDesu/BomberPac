@@ -2,15 +2,16 @@
 ############# RENDERIZA COMPLETAMENTE O CAMPO ##################
 ##################################################################
 INICIO_CAMPO:
-	li t0, 21		    # Primeira matriz do CAMPO
+	li t0, 41		    # Primeira matriz do CAMPO
 	li t1, 278		    # Ultima matriz do tilemap
 # Loop que percorre todo o Tilemap. Da esquerda para direita, de cima para baixo e byte a byte.
 LOOP_TILEMAP_CAMPO:
 	bgt t0, t1, FIM_CAMPO		# Enquanto t0 < ultima matriz do tilemap, faca o abaixo
-		lui t4, 0xFF000	# Carrega os 20 bits mais a esquerda de t4 com ENDERECO_INICIAL_FRAME : Nesse caso do Frame 0
-	
-        # li s3, 0xFF200604   # Pega endereco do frame de selecao
-        # lw s3, 0(s3)        # Pega o indice do FRAME a ser renderizado
+		lui t4, 0xFF000			# Carrega os 20 bits mais a esquerda de t4 com ENDERECO_INICIAL_FRAME : Nesse caso do Frame 0
+		li s3, 0xFF200604		# Pega endereco de SELECAO_DE_FRAME_EXIBIDO
+		lw s3, 0(s3)			# Pega conteudo de SELECAO_DE_FRAME_EXIBIDO
+		slli s3, s3, 20			# Faca o valor em t0, andar 20 bits para a esquerda : Parte da montagem do endereco inicial
+		add t4, t4, s3			# Some o valor deslocado a base 0xFF
 
 		# As contas abaixo objetivam gerar uma correspondencia direta entre a posicao no Tilemap (t0) e no Frame (Endereco em t4)
 	
@@ -49,10 +50,15 @@ CASO_2_CAMPO:
 		la t5, IMAGEM_2		# Se o byte atual == 2, pegue a imagem_2
 		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual							
 CASO_3_CAMPO:
-		li t2, 3			# Pegue o valor 0
+		li t2, 3		# Pegue o valor 0
+		bne t5, t2, CASO_4_CAMPO	# Compare com o valor no byte atual do Tilemap
+		la t5, IMAGEM_3		# Se o byte atual == 2, pegue a imagem_2
+		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual		
+CASO_4_CAMPO:
+		li t2, 4			# Pegue o valor 0
 		# O ultimo caso possui uma comparacao oposta dos demais (!= ao inves de ==).
 		bne t5, t2, ITERA_LOOP_TILEMAP_CAMPO	# Compare com o valor no byte atual do Tilemap.
-		la t5, IMAGEM_3			# Se o byte atual == 3, pegue a imagem_3
+		la t5, IMAGEM_JOGADOR			# Se o byte atual == 3, pegue a imagem_3
 
 # Matriz eh um conjunto de 16x16 pixels
 # O loop abaixo printa o valor da imagem correspondente a matriz byte do tilemap

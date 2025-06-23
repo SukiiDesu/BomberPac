@@ -18,7 +18,7 @@
 # Nao leu nenhuma tecla
 FIM_ZERO_FASE_1:         
     li s1, 0                    # Pegue o valor 0
-    sw s1, 0(s0)                  # Como nenhum caractere foi lido, "TECLA_LIDA = 0", ou seja, "Nao faca nada"				    
+    sw s1, 0(s0)                # Como nenhum caractere foi lido, "TECLA_LIDA = 0", ou seja, "Nao faca nada"				    
 
 # Sai da funcao 
 FIM_TECLADO_FASE_1:
