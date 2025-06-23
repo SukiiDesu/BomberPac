@@ -1,6 +1,6 @@
 .data
 	.include "variaveis.data"	# Arquivo que contem todas as variaveis - mapas, posicoes, etc - usadas no jogo
-	DEBUG_MSG: .string "Travou aqui\n"
+	DEBUG_MSG: .string "Achei um bloco de valor 2\n"
 
 .text
 CONFIGURA_FASE_1:
