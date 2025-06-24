@@ -24,6 +24,10 @@ CONFIGURA_FASE_1:
 	la t0, POSICAO_JOGADOR
 	li t1, 41
 	sw t1, 0(t0)
+	
+	la t1, IMAGEM_JOGADOR_baixo
+	la t5, IMAGEM_JOGADOR
+	sw t1, 0(t5)
 
 ################################################
 ###### Inicializa todos os scores ##############

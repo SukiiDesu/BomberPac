@@ -5,7 +5,7 @@ INICIO_JOGADOR:
 	la t0, POSICAO_JOGADOR
 	lw t0, 0(t0)
 
-	la t5, IMAGEM_JOGADOR
+	lw t5, IMAGEM_JOGADOR
 
 # Loop que percorre todo o Tilemap. Da esquerda para direita, de cima para baixo e byte a byte.
 LOOP_TILEMAP_JOGADOR:

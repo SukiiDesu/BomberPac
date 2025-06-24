@@ -29,7 +29,12 @@ CASO_TECLA_w:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
-
+        
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_cima		# pega o endereco de "IMAGEM_JOGADOR_cima" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5 
+    
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
 
@@ -60,6 +65,11 @@ CASO_TECLA_a:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
+    
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_esquerda	# pega o endereco de "IMAGEM_JOGADOR_esquerda" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
 
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
@@ -90,6 +100,11 @@ CASO_TECLA_s:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
+    
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_baixo		# pega o endereco de "IMAGEM_JOGADOR_esquerda" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
 
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
@@ -104,8 +119,8 @@ CASO_TECLA_d:
     la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
-
-
+    
+    
     ## EVENTO: COLISAO BLOCOS ##
     li t2, 1                            # Pegue o valor 1
     beq s3, t2, MOVIMENTA_INIMIGOS    # Conteudo na nova posicao eh Bloco indestrutivel (Pilastra)
@@ -120,6 +135,11 @@ CASO_TECLA_d:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
+    
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_direita	# pega o endereco de "IMAGEM_JOGADOR_direita" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
 
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
