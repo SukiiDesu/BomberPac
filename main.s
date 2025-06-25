@@ -9,6 +9,7 @@ CONFIGURA_FASE_1:
 ##########################################################
 	.include "RENDERIZA_FRAME_0_FASE_1.s"
 	.include "RENDERIZA_FRAME_1_FASE_1.s"
+	.include "RENDERIZA_HUD.s"
 	#j FIM_GAME_LOOP_FASE_1
 
 ################################################

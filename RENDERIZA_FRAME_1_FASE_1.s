@@ -1,6 +1,7 @@
 ##################################################################
 ############# RENDERIZA COMPLETAMENTE O FRAME 1 ##################
 ##################################################################
+
 INICIO_FRAME_1_FASE_1:
 	la s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
 	addi s2, s2, -1		# Essa correcao permite que o LOOP_TILEMAP_FRAME_1_FASE_1 sempre funcione com iterando o endereco do byte do tilemap
