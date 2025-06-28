@@ -5,7 +5,12 @@
 CASO_TECLA_w:
     li t2, 119		            # Pegue o valor 'w' na tabela ASCII	
     bne s0, t2, CASO_TECLA_a	# Se a tecla pressionada nao foi 'w'
-    
+
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_cima		# pega o endereco de "IMAGEM_JOGADOR_cima" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5 
+
     la s0, POSICAO_JOGADOR		# Pegue endereco POSICAO_ATUAL_JOGADOR
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
     addi t0, t0, -20             # Adicone o offset
@@ -13,7 +18,6 @@ CASO_TECLA_w:
     la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
-
 
     ## EVENTO: COLISAO BLOCOS ##
     li t2, 1                            # Pegue o valor 1
@@ -29,11 +33,6 @@ CASO_TECLA_w:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
-        
-    ## atualiza sprite jogador ##
-    la t1, IMAGEM_JOGADOR_cima		# pega o endereco de "IMAGEM_JOGADOR_cima" e coloca em t1
-    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5 
     
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
@@ -50,6 +49,10 @@ CASO_TECLA_a:
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
 
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_esquerda	# pega o endereco de "IMAGEM_JOGADOR_esquerda" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
 
     ## EVENTO: COLISAO BLOCOS ##
     li t2, 1                            # Pegue o valor 1
@@ -65,11 +68,6 @@ CASO_TECLA_a:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
-    
-    ## atualiza sprite jogador ##
-    la t1, IMAGEM_JOGADOR_esquerda	# pega o endereco de "IMAGEM_JOGADOR_esquerda" e coloca em t1
-    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
 
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
@@ -77,6 +75,11 @@ CASO_TECLA_s:
     li t2, 115		            # Pegue o valor S na tabela ASCII	
     bne s0, t2, CASO_TECLA_d	# Se a tecla pressionada nao foi 's'
     
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_baixo		# pega o endereco de "IMAGEM_JOGADOR_esquerda" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
+
     la s0, POSICAO_JOGADOR		# Pegue endereco POSICAO_ATUAL_JOGADOR
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
     addi t0, t0, 20             # Adicone o offset
@@ -84,7 +87,6 @@ CASO_TECLA_s:
     la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
-
 
     ## EVENTO: COLISAO BLOCOS ##
     li t2, 1                            # Pegue o valor 1
@@ -100,18 +102,18 @@ CASO_TECLA_s:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
-    
-    ## atualiza sprite jogador ##
-    la t1, IMAGEM_JOGADOR_baixo		# pega o endereco de "IMAGEM_JOGADOR_esquerda" e coloca em t1
-    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
 
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
 CASO_TECLA_d:
     li t2, 100		            # Pegue o valor 'd' na tabela ASCII	
     bne s0, t2, CASO_TECLA_L	# Se a tecla pressionada nao foi 'd'    # Corrigir PRIMEIRO salto para CASO_TECLA_L, DEPOIS para CASO_TECLA_L
-    
+
+    ## atualiza sprite jogador ##
+    la t1, IMAGEM_JOGADOR_direita	# pega o endereco de "IMAGEM_JOGADOR_direita" e coloca em t1
+    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
+    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
+
     la s0, POSICAO_JOGADOR		# Pegue endereco POSICAO_ATUAL_JOGADOR
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
     addi t0, t0, 1              # Adicone o offset
@@ -119,7 +121,6 @@ CASO_TECLA_d:
     la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
-    
     
     ## EVENTO: COLISAO BLOCOS ##
     li t2, 1                            # Pegue o valor 1
@@ -135,11 +136,6 @@ CASO_TECLA_d:
     sb t2, 0(s1)    	# Apague rastro do Jogador
 
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
-    
-    ## atualiza sprite jogador ##
-    la t1, IMAGEM_JOGADOR_direita	# pega o endereco de "IMAGEM_JOGADOR_direita" e coloca em t1
-    la t5, IMAGEM_JOGADOR		# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-    sw t1, 0(t5)			# coloca o endereco de t1 no endereco de t5
 
     j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
 
