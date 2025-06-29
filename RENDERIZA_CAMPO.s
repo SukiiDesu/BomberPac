@@ -57,12 +57,12 @@ CASO_3_CAMPO:
 CASO_6_CAMPO:
 		li t2, 6		# Pegue o valor 0
 		bne t5, t2, CASO_7_CAMPO	# Compare com o valor no byte atual do Tilemap
-		la t5, bomba		# Se o byte atual == 2, pegue a imagem_2
+		la t5, VIDA		# Se o byte atual == 2, pegue a imagem_2
 		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual				
 CASO_7_CAMPO:
 		li t2, 7		# Pegue o valor 0
 		bne t5, t2, CASO_8_CAMPO	# Compare com o valor no byte atual do Tilemap
-		la t5, VIDA		# Se o byte atual == 2, pegue a imagem_2
+		la t5, bomba		# Se o byte atual == 2, pegue a imagem_2
 		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual				
 CASO_8_CAMPO:
 		li t2, 8		# Pegue o valor 0

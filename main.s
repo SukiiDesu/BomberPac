@@ -40,6 +40,10 @@ CONFIGURA_FASE_1:
 	li t1, 0			# Pega o valor 0
 	sw t1, 0(t0)		# O primeiro FRAME a ser mostrado serah o FRAME 0
 
+	la t5, ULTIMA_TECLA_PRESSIONADA
+	li t0, 's'
+    sw t0, 0(t5)
+
 ################################################
 ###### Inicializa posicao Jogador ##############
 ################################################
@@ -51,10 +55,9 @@ CONFIGURA_FASE_1:
 	la t5, IMAGEM_JOGADOR
 	sw t1, 0(t5)
 
-	# # Inicializa ULTIMA_TECLA_LIDA
-	# la s2, ULTIMA_TECLA_LIDA
-	# li t0, 's'
-	# sw t0, 0(s2)
+	la t1, BOOLEANO_FORCA
+	li t5, 1
+	sw t5, 0(t1)
 
 	# # Inicializa TEMPO_INICIAL_POWER_UP_FORCA
 	# la s2, TEMPO_INICIAL_POWER_UP_FORCA
@@ -112,74 +115,6 @@ INICIO_GAME_LOOP_FASE_1:
 	# ecall
 	.include "REDUZ_TIMER.s"
 
-	##################################
-	### Verifica Estado de PowerUp ###
-	##################################
-
-	# # Redundante, mas eh boa pratica
-	# la t0, SCORE_TIMER      # Pega o endereco de SCORE_TIMER
-	# lw t1, 0(t0)            # Pega o conteudo de SCORE_TIMER
-
-	# la t0, TEMPO_INICIAL_POWER_UP_FORCA
-	# lw t4, 0(t0)
-	
-	# sub t2, t1, t4
-	# li t3, 6
-	# bgt t2, 6, ENCERRA_EVENTO
-
-	# la t6, ULTIMA_TECLA_LIDA
-	# lw t6, 0(t6)
-
-	# CASO_FORCA_CIMA:
-	# 	li t2, 'w'						# Pegue o valor 0
-	# 	bne t6, t2, CASO_FORCA_BAIXO	# Compare com o valor no byte atual do Tilemap
-
-	# 	# Carrega sprite de forca
-	# 	la t1, IMAGEM_JOGADOR_FORCA_cima	# pega o endereco de "IMAGEM_JOGADOR_FORCA_cima" e coloca em t1
-	# 	la t5, IMAGEM_JOGADOR				# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-	# 	sw t1, 0(t5)						# coloca o endereco de t1 no endereco de t5 
-
-	# 	j FIM_EVENTOS
-
-	# CASO_FORCA_BAIXO:
-	# 	li t2, 's'						# Pegue o valor 0
-	# 	bne t6, t2, CASO_FORCA_DIREITA	# Compare com o valor no byte atual do Tilemap
-
-	# 	# Carrega sprite de forca
-	# 	la t1, IMAGEM_JOGADOR_FORCA_baixo	# pega o endereco de "IMAGEM_JOGADOR_FORCA_cima" e coloca em t1
-	# 	la t5, IMAGEM_JOGADOR				# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-	# 	sw t1, 0(t5)						# coloca o endereco de t1 no endereco de t5 
-
-	# 	j FIM_EVENTOS
-
-	# CASO_FORCA_DIREITA:
-	# 	li t2, 'd'						# Pegue o valor 0
-	# 	bne t6, t2, CASO_FORCA_ESQUERDA	# Compare com o valor no byte atual do Tilemap
-
-	# 	# Carrega sprite de forca
-	# 	la t1, IMAGEM_JOGADOR_FORCA_direita	# pega o endereco de "IMAGEM_JOGADOR_FORCA_cima" e coloca em t1
-	# 	la t5, IMAGEM_JOGADOR				# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-	# 	sw t1, 0(t5)						# coloca o endereco de t1 no endereco de t5 
-
-	# 	j FIM_EVENTOS	
-
-	# CASO_FORCA_ESQUERDA:
-	# 	li t2, 'a'					# Pegue o valor 0
-	# 	bne t6, t2, FIM_EVENTOS		# Compare com o valor no byte atual do Tilemap
-
-	# 	# Carrega sprite de forca
-	# 	la t1, IMAGEM_JOGADOR_FORCA_esquerda	# pega o endereco de "IMAGEM_JOGADOR_FORCA_cima" e coloca em t1
-	# 	la t5, IMAGEM_JOGADOR					# pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
-	# 	sw t1, 0(t5)							# coloca o endereco de t1 no endereco de t5 
-
-	# 	j FIM_EVENTOS	
-
-	# ENCERRA_EVENTO:
-	# # Encerra evento 
-	# li t3, -1
-	# sw t3, 0(t0)
-
-	# FIM_EVENTOS:
 	# ####################################
 	# # RENDERIZAÇOES DINAMICAS #
 	# ####################################
@@ -192,7 +127,9 @@ INICIO_GAME_LOOP_FASE_1:
 	lw t1, 0(t0)		# Pega o valor 0
 	xori t1, t1, 1		# Se Frame atual == 0, alterna para o frame 1 e vice-versa
 	sw t1, 0(t0)		# Atualiza o valor de SELECAO_DE_FRAME_EXIBIDO
-	
+
+	.include "auxiliar.s"
+
 	.include "TECLADO_FASE_1.s"
 
 	# ############################
