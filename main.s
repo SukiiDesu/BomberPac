@@ -139,7 +139,7 @@ INICIO_GAME_LOOP_FASE_1:
 
 	.include "ATUALIZA_TILEMAP.s"
 
-	#.include "TOCA_MUSICA.s"
+	.include "TOCA_MUSICA.s"
 
 	j INICIO_GAME_LOOP_FASE_1
 
