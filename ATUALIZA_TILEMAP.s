@@ -13,28 +13,61 @@ CASO_TECLA_w:
 
     la s0, POSICAO_JOGADOR		# Pegue endereco POSICAO_ATUAL_JOGADOR
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
-    addi t0, t0, -20             # Adicone o offset
+    addi t0, t0, -20            # Adicone o offset
 
     lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
 
     ## EVENTO: COLISAO BLOCOS ##
-    li t2, 1                            # Pegue o valor 1
+    COLISAO_BLOCOS_W:
+    li t2, 1                          # Pegue o valor 1
     beq s3, t2, MOVIMENTA_INIMIGOS    # Conteudo na nova posicao eh Bloco indestrutivel (Pilastra)
-    li t2, 3                            # Pegue o valor 3
+    li t2, 3                          # Pegue o valor 3
     beq s3, t2, MOVIMENTA_INIMIGOS    # Conteudo na nova posicao eh Bloco destrutivel (Tijolo)
 
+    # Movimento em TILEMAP
     li t2, 4
-    sb t2, 0(s1)    # Movimenta o JOGADOR
+    sb t2, 0(s1)
 
+    # Movimenta Jogador
     addi s1, s1, 20	    # Retira offset
     li t2, 0        	# Pegue o valor 0
     sb t2, 0(s1)    	# Apague rastro do Jogador
+    sw t0, 0(s0)        # Atualiza POSICAO_JOGADOR
+    j MOVIMENTA_INIMIGOS
 
-    sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
-    
-    j MOVIMENTA_INIMIGOS      # Encerra ATUALIZA_FRAME.s		
+    # # Atualiza Ultima Tecla lida
+	# la t6, ULTIMA_TECLA_LIDA
+    # li s0, 'w'
+	# sw s0, 0(t6)
+
+    # ## EVENTO: PEGAR PONTOS ##
+    # li t2, 8                      # Pegue o valor 1
+    # bne s3, t2, PEGAR_POWER_UP    # Conteudo na nova posicao eh Bloco indestrutivel (Pilastra)
+    # # Pontos++
+    # la t2, PONTOS
+    # lw t3, 0(t2)
+    # addi t3, t3, 1
+    # sw t3, 0(t2)
+    # j MOVIMENTA_INIMIGOS
+
+    # ## EVENTO: PEGAR POWER UP ##
+    # PEGAR_POWER_UP:
+    # li t2, 6                                # Pegue o valor 1
+    # bne s3, t2, CAIR_EM_ARMADILHA           # Conteudo na nova posicao eh Bloco indestrutivel (Pilastra)
+    # ## Reseta timer do power up ##
+    # la t3, TEMPO_INICIAL_POWER_UP_FORCA
+    # la t2, SCORE_TIMER                      # Pega o endereco de SCORE_TIMER
+	# lw t2, 0(t2)                            # Pega o conteudo de SCORE_TIMER
+    # sw t3, 0(t0)
+    # j MOVIMENTA_INIMIGOS
+
+    # ## EVENTO: CAIR EM ARMADILHA ##
+    # CAIR_EM_ARMADILHA:
+    # li t2, 7                            # Pegue o valor 1
+    # bne s3, t2, MOVIMENTA_INIMIGOS      # Conteudo na nova posicao eh Bloco indestrutivel (Pilastra)
+    # j FIM_GAME_LOOP_FASE_1              # Encerra o jogo	
 
 
 CASO_TECLA_a:
@@ -61,7 +94,7 @@ CASO_TECLA_a:
     beq s3, t2, MOVIMENTA_INIMIGOS    # Conteudo na nova posicao eh Bloco destrutivel (Tijolo)
 
     li t2, 4
-    sb t2, 0(s1)    # Movimenta o JOGADOR
+    sb t2, 0(s1)        # Movimenta o JOGADOR
 
     addi s1, s1, 1	    # Retira offset
     li t2, 0        	# Pegue o valor 0
@@ -173,8 +206,44 @@ CASO_TECLA_L:
         #### RANDOMIZA A APARICAO DE ARMADILHAS E POWERUPS ###
         ######################################################
 
-        li t2, 0        # Pegue o valor 0
-        sb t2, 0(s2)    # Atualiza matriz Tijolo para Campo vazio 
+        li a7, 30   # Chama tempo atual
+        ecall
+
+        # Seta a seed com base no tempo atual
+        mv a1, a0   
+        li a0, 0
+        li a7, 40
+        ecall
+
+        # Pega um numero aleatorio de [0, 99] 
+        li a1, 99
+        li a7, 42
+        ecall
+
+        # Se numero aleatorio > 30 -> Nao haverah powerup/armadilha
+        li t3, 10
+        bgt a0, t3, ESVAZIA_ESPACO_L
+
+        mv t2, a0
+        srli t2, t2, 1  # t2 = t2//2
+
+        # Se t2 > 8 -> Haverah power Up, se nao haverah armadilha
+        li t3, 3
+        bge t2, t3, SURGE_POWER_UP_L
+
+        SURGE_ARMADILHA_L:
+            li t3, 7
+            sb t3, 0(s2)
+            j ITERA_LOOP_TILEMAP_APAGA_BLOCOS
+
+        SURGE_POWER_UP_L:
+            li t3, 6
+            sb t3, 0(s2)
+            j ITERA_LOOP_TILEMAP_APAGA_BLOCOS
+
+        ESVAZIA_ESPACO_L:
+            li t2, 0        # Pegue o valor 0
+            sb t2, 0(s2)    # Atualiza matriz Tijolo para Campo vazio 
 
     ITERA_LOOP_TILEMAP_APAGA_BLOCOS:
         addi t0, t0, 1	                      # t0++

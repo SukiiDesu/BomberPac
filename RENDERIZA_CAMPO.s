@@ -47,12 +47,27 @@ CASO_1_CAMPO:
 CASO_2_CAMPO:
 		li t2, 2		# Pegue o valor 0
 		bne t5, t2, CASO_3_CAMPO	# Compare com o valor no byte atual do Tilemap
-		la t5, IMAGEM_2		# Se o byte atual == 2, pegue a imagem_2
-		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual							
+		la t5, ponto		# Se o byte atual == 2, pegue a imagem_2
+		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual		
 CASO_3_CAMPO:
 		li t2, 3		# Pegue o valor 0
+		bne t5, t2, CASO_6_CAMPO	# Compare com o valor no byte atual do Tilemap
+		la t5, IMAGEM_3		# Se o byte atual == 2, pegue a imagem_2
+		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual		
+CASO_6_CAMPO:
+		li t2, 6		# Pegue o valor 0
+		bne t5, t2, CASO_7_CAMPO	# Compare com o valor no byte atual do Tilemap
+		la t5, bomba		# Se o byte atual == 2, pegue a imagem_2
+		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual				
+CASO_7_CAMPO:
+		li t2, 7		# Pegue o valor 0
+		bne t5, t2, CASO_8_CAMPO	# Compare com o valor no byte atual do Tilemap
+		la t5, VIDA		# Se o byte atual == 2, pegue a imagem_2
+		j PREENCHE_MATRIZ_CAMPO	# Printa a matriz do byte atual				
+CASO_8_CAMPO:
+		li t2, 8		# Pegue o valor 0
 		bne t5, t2, ITERA_LOOP_TILEMAP_CAMPO 	# Compare com o valor no byte atual do Tilemap
-		la t5, IMAGEM_3		# Se o byte atual == 2, pegue a imagem_2	
+		la t5, ponto		# Se o byte atual == 2, pegue a imagem_2	
 
 # Matriz eh um conjunto de 16x16 pixels
 # O loop abaixo printa o valor da imagem correspondente a matriz byte do tilemap
