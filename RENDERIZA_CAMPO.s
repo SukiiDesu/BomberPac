@@ -29,7 +29,7 @@ LOOP_TILEMAP_CAMPO:
 		mul t2, t3, t2	# 16 * (t0 % 20) gera o valor em endereco correspondente a quantidade de matriz passadas na matriz
 		add t4, t4, t2	# Acrescente ao endereco calculado ate agora
 
-	    la s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
+	    lw s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
 		add s2, s2, t0	# Itere o endereco do byte no tilemap
 		lb t5, 0(s2)	# Valor da matriz no Tilemap
 

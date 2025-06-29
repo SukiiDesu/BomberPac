@@ -3,7 +3,7 @@
 ##################################################################
 
 INICIO_FRAME_1_FASE_1:
-	la s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
+	lw s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
 	addi s2, s2, -1		# Essa correcao permite que o LOOP_TILEMAP_FRAME_1_FASE_1 sempre funcione com iterando o endereco do byte do tilemap
 	li t0, 0		# Primeira matriz do tilemap
 	li t1, 299		# Ultima matriz do tilemap

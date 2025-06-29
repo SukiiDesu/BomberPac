@@ -3,6 +3,28 @@
 	DEBUG_MSG: .string "Achei um bloco de valor 2\n"
 
 .text
+################################################
+###### Controle de Fases ######
+################################################
+	la t0, FASE_1
+	la t1, TILEMAP_MUTAVEL
+	sw t0, 0(t1)
+
+    la t0, FASE_ATUAL
+	li t1, 1
+    sw t1, 0(t0)
+
+	j CONFIGURA_FASE_1
+
+PASSA_FASE_2:
+	la t0, FASE_2
+	la t1, TILEMAP_MUTAVEL
+	sw t0, 0(t1)
+
+	la t0, FASE_ATUAL
+	li t1, 2
+    sw t1, 0(t0)
+
 CONFIGURA_FASE_1:
 ##########################################################
 # Renderiza os frames estaticamente (por completo) #######
@@ -10,7 +32,6 @@ CONFIGURA_FASE_1:
 	.include "RENDERIZA_FRAME_0_FASE_1.s"
 	.include "RENDERIZA_FRAME_1_FASE_1.s"
 	.include "RENDERIZA_HUD.s"
-	#j FIM_GAME_LOOP_FASE_1
 
 ################################################
 ###### Inicializa Frame a ser renderizado ######
@@ -84,6 +105,7 @@ INICIO_GAME_LOOP_FASE_1:
 	# ####################################
 	# # RENDERIZAÇOES DINAMICAS #
 	# ####################################
+
 	.include "RENDERIZA_CAMPO.s"
 	.include "RENDERIZA_JOGADOR.s"
 
@@ -109,8 +131,3 @@ INICIO_GAME_LOOP_FASE_1:
 FIM_GAME_LOOP_FASE_1:
 	li a7, 10
 	ecall
-
-#CONFIGURA_FASE_2:
-#INICIO_GAME_LOOP_FASE_2:
-
-#FIM_GAME_LOOP_FASE_2:

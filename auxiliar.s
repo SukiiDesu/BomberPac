@@ -1,21 +1,61 @@
+.data
+	.include "variaveis.data"	# Arquivo que contem todas as variaveis - mapas, posicoes, etc - usadas no jogo
+	DEBUG_MSG: .string "Achei um bloco de valor 2\n"
+
+.text
+################################################
+###### Controle de Fases ######
+################################################
+	la t0, FASE_1
+	la t1, TILEMAP_MUTAVEL
+	sw t0, 0(t1)
+
+    la t0, FASE_ATUAL
+	li t1, 1
+    sw t1, 0(t0)
+
+	j CONFIGURA_FASE_1
+
+PASSA_FASE_2:
+	la t0, FASE_2
+	la t1, TILEMAP_MUTAVEL
+	sw t0, 0(t1)
+
+	la t0, FASE_ATUAL
+	li t1, 2
+    sw t1, 0(t0)
+
+CONFIGURA_FASE_1:
+##########################################################
+# Renderiza os frames estaticamente (por completo) #######
+##########################################################
+	.include "RENDERIZA_FRAME_0_FASE_1.s"
+	.include "RENDERIZA_FRAME_1_FASE_1.s"
+	.include "RENDERIZA_HUD.s"
+
+################################################
+###### Inicializa Frame a ser renderizado ######
+################################################
+	li t0, 0xFF200604	# Pega endereco de SELECAO_DE_FRAME_EXIBIDO
+	li t1, 0			# Pega o valor 0
+	sw t1, 0(t0)		# O primeiro FRAME a ser mostrado serah o FRAME 0
+
+################################################
+###### Inicializa posicao Jogador ##############
+################################################
+	la t0, POSICAO_JOGADOR
+	li t1, 41
+	sw t1, 0(t0)
+	
+	la t1, IMAGEM_JOGADOR_baixo
+	la t5, IMAGEM_JOGADOR
+	sw t1, 0(t5)
+
 ################################################
 ###### Inicializa todos os scores ##############
 ################################################
-	# Inicializa POSICAO_MUSICA
-	li t0, 0							# t0 = 0
-	la t1, POSICAO_MUSICA				# Pega o endereco de POSICAO_MUSICA
-	sw t0, 0(t1)						# POSICAO_MUSICA = 0
+	.include "INICIALIZA_SCORES.s"
 
-	la t0, TAMANHO_MUSICA_FUNDO_FASE_1	# Pegue o enderecao do tamanho da musica que deve ser tocada
-	lw t0, 0(t0)						# Pegue o valor do tamanho da musica
-	la t1, TAMANHO_MUSICA				# Pegue o endereco da variavel generica de tamanho
-	sw t0, 0(t1)						# Variavel generica = Tamanho musica atual
-
-################################################
-### Inicializa instrumento (Timbre) e volume ###
-################################################
-	li a2, 127
-	li a3, 127
 ##############################################################
 # Inicializa todos os TEMPO_INICIAL das funcoes periodicas ###
 ##############################################################
@@ -23,55 +63,71 @@
 	li a7, 30
 	ecall
 
-	# Correcoa para que todas funcoes rodem pela primeira vez
+	# Correcao para que todas funcoes rodem pela primeira vez
 	li t0, -6000		# O valor aqui precisa ser ajustado para que todas as funcoes funcionem
 	add a0, a0, t0		# "Atrasa" TEMPO_ATUAL
+											
+	# Inicializa TEMPO_INICIAL_SCORE_TIMER
+	la s2, TEMPO_INICIAL_SCORE_TIMER
+	sw a0, 0(s2)	# Inicializa: TEMPO_INICIAL_SCORE_TIMER = TEMPO_ATUAL			
 
 	# Inicializa TEMPO_INICIAL_MUSICA
 	la s2, TEMPO_INICIAL_MUSICA
-	sw a0, 0(s2)	# Inicializa: TEMPO_INICIA_TESTE = TEMPO_ATUAL	
+	li t0, 0
+	sw t0, 0(s2)	# Inicializa: TEMPO_INICIAL_MUSICA = TEMPO_ATUAL
 
+#############################################################
+# Inicializa as variaveis de usadas na MUSICA ###
+#############################################################
 
+	# Configura instrumento
+	li a2, 42	# Define que o timbre do instrumento : Nesse caso, um instrumento de cordas qualquer
+	li a3, 80	# Define o volume da nota : Nesse caso 80 decibeis
+
+	# Inicializa ponteiro ("agulha") da musica
+	li t0, 0			# t0 = 0
+	la t1, INDICE_NOTA	# t1 = &INDICE_NOTA
+	sw t0, 0(t1)		# INDICE_NOTA = 0 : Comecamos a musica na nota 0
+
+	# Inicializa TAMANHO_MUSICA : variavel auxiliar que guarda o numero de notas da musica. Serve para permitir loop de musica
+	la t0, TAMANHO_MUSICA_FUNDO_FASE_1	# Pega endereco de TAMANHO_MUSICA_FUNDO_FASE_1
+	lw t0, 0(t0)						# Pega conteudo de TAMANHO_MUSICA_FUNDO_FASE_1
+	la t1, TAMANHO_MUSICA				# Pega endereco de TAMANHO_MUSICA
+	sw t0, 0(t1)						# TAMANHO_MUSICA = TAMANHO_MUSICA_FUNDO_FASE_1
 
 INICIO_GAME_LOOP_FASE_1:
 
-	#.include "TECLADO_FASE_1.s"
+	# li a7, 4
+	# la a0, DEBUG_MSG
+	# ecall
+	.include "REDUZ_TIMER.s"
 
-##################################################
-### ESPERA(DURACAO_NOTA_ATUAL) PARA TOCA_NOTA ####
-##################################################
+	# ####################################
+	# # RENDERIZAÇOES DINAMICAS #
+	# ####################################
 
-	# Pega tempo em TEMPO_INICIAL_MUSICA
-	la s2, TEMPO_INICIAL_MUSICA	# Pega endereco de TEMPO_ATUAL
-	lw s2, 0(s2)				# s2 = conteudo na variavel TEMPO_INICIAL_MUSICA
+	.include "RENDERIZA_CAMPO.s"
+	.include "RENDERIZA_JOGADOR.s"
 
-	# Pega tempo atual
-	li a7, 30		# Pega o tempo atual
-	ecall			# Chama o sistema operacional e guarda tempo atual em a0
+	# Troca/Inverte Frames
+	li t0, 0xFF200604	# Pega endereco de SELECAO_DE_FRAME_EXIBIDO
+	lw t1, 0(t0)		# Pega o valor 0
+	xori t1, t1, 1		# Se Frame atual == 0, alterna para o frame 1 e vice-versa
+	sw t1, 0(t0)		# Atualiza o valor de SELECAO_DE_FRAME_EXIBIDO
+	
+	.include "TECLADO_FASE_1.s"
 
-	# Pega duracao da nota atual
-	la t2, POSICAO_MUSICA				# Pega o indice em POSICAO_MUSICA (Nota sendo tocada)
-	lw t2, 0(t2)						# Pega o valor de POSICAO_MUSICA
-	la t4, NOTAS_MUSICA_FUNDO_FASE_1	# Pega endereco inicial do vetor Notas
-	add t4, t4, t2						# t4 = Endereco_inicial + Notas : Ou seja endereco nota atual
-	lw t2, 4(t4)						# Pega a duracao da nota atual
+	# ############################
+	# # FUNCAO ATUALIZA_TILEMAP
+	# ############################
+	# A posicao do personagem eh salva como parte do Tilemap
 
-	# Confere o tempo passado desde que a nota comecou a ser tocada
-	sub t3, a0, s2			# t3 = TEMPO_ATUAL - TEMPO_INICIAL_TESTE
-	blt t3, t2, PULA_TOCA_PROXIMA_NOTA 	# Se t3 >= duracao da nota em milisegundos -> toque proxima nota
+	.include "ATUALIZA_TILEMAP.s"
 
-##################################################
-### FUNCAO: TOCA_PROXIMA_NOTA() ####
-##################################################
+	.include "TOCA_MUSICA.s"
 
-	addi t2, t2, 1
-	sw 
+	j INICIO_GAME_LOOP_FASE_1
 
-	# Atualiza TEMPO_INICIAL_MUSICA
-	li a7, 30
+FIM_GAME_LOOP_FASE_1:
+	li a7, 10
 	ecall
-	
-	la s2, TEMPO_INICIAL_MUSICA
-	sw a0, 0(s2)
-	
-PULA_TOCA_PROXIMA_NOTA:	

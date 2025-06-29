@@ -15,7 +15,7 @@ CASO_TECLA_w:
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
     addi t0, t0, -20             # Adicone o offset
 
-    la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
+    lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
 
@@ -45,7 +45,7 @@ CASO_TECLA_a:
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
     addi t0, t0, -1             # Adicone o offset
 
-    la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
+    lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
 
@@ -84,7 +84,7 @@ CASO_TECLA_s:
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
     addi t0, t0, 20             # Adicone o offset
 
-    la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
+    lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
 
@@ -118,7 +118,7 @@ CASO_TECLA_d:
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
     addi t0, t0, 1              # Adicone o offset
 
-    la s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
+    lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
     
@@ -159,7 +159,7 @@ CASO_TECLA_L:
     LOOP_TILEMAP_APAGA_BLOCOS:
         bgt t0, t1, MOVIMENTA_INIMIGOS		# Enquanto t0 < ultima matriz do tilemap, faca o abaixo
 
-        la s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
+        lw s2, TILEMAP_MUTAVEL	# Pegue o endereco do Tilemap
         add s2, s2, t0	        # Itere o endereco do byte no tilemap
         lb t5, 0(s2)	        # Valor da matriz no Tilemap
 
@@ -167,6 +167,11 @@ CASO_TECLA_L:
     CASO_2_APAGA_BLOCOS:
         li t2, 3		                            # Pegue o valor 0
         bne t5, t2, ITERA_LOOP_TILEMAP_APAGA_BLOCOS	# Compare com o valor no byte atual do Tilemap
+
+    
+        ######################################################
+        #### RANDOMIZA A APARICAO DE ARMADILHAS E POWERUPS ###
+        ######################################################
 
         li t2, 0        # Pegue o valor 0
         sb t2, 0(s2)    # Atualiza matriz Tijolo para Campo vazio 
@@ -186,9 +191,15 @@ CASO_TECLA_P:
     bne s0, t2, MOVIMENTA_INIMIGOS	# Se a tecla pressionada nao foi 'P'
 
     ## EVENTO : PROXIMA_FASE (POR ENQUANTO ENCERRA O JOGO) ##
+
+    la t0, FASE_ATUAL
+    lw t0, 0(t0)
+
+    li t1, 1
+    beq t0, t1, PASSA_FASE_2            # Passa para a fase 2
     j FIM_GAME_LOOP_FASE_1              # Encerra Game_Loop
-    la s0, IMAGEM_JOGADOR			    # Se o byte atual == 3, pegue a imagem_3
 
 MOVIMENTA_INIMIGOS:     # Por enquanto ainda nao ha inimigos
 
 FIM_ATUALIZA_TILEMAP:
+
