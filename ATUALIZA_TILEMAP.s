@@ -116,7 +116,7 @@ CASO_TECLA_a:
 
     ## EVENTO: POWERUP FORCA ##
     li t2, 6
-    bne s3, t2, MOVIMENTA_JOGADOR_ESQUERDA
+    bne s3, t2, COLETA_PONTO_ESQUERDA
     la t1, BOOLEANO_FORCA
     li t2, 1
     sw t2, 0(t1)
@@ -124,6 +124,15 @@ CASO_TECLA_a:
     la t1, IMAGEM_JOGADOR_FORCA_esquerda	# pega o endereco de "IMAGEM_JOGADOR_esquerda" e coloca em t1
     la t5, IMAGEM_JOGADOR		        # pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
     sw t1, 0(t5)			            # coloca o endereco de t1 no endereco de t5
+
+    ## EVENTO: COLETA PONTO
+    COLETA_PONTO_ESQUERDA:
+    li t2, 8
+    bne s3, t2, MOVIMENTA_JOGADOR_ESQUERDA
+    la t1, PONTOS
+    lw t2, 0(t1)
+    addi t2, t2, 1
+    sw t2, 0(t1)
 
     MOVIMENTA_JOGADOR_ESQUERDA:
     # ANDA JOGADOR PARA A ESQUERDA
@@ -177,7 +186,7 @@ CASO_TECLA_s:
 
     ## EVENTO: POWERUP FORCA ##
     li t2, 6
-    bne s3, t2, MOVIMENTA_JOGADOR_BAIXO
+    bne s3, t2, COLETA_PONTO_BAIXO
     la t1, BOOLEANO_FORCA
     li t2, 1
     sw t2, 0(t1)
@@ -186,16 +195,22 @@ CASO_TECLA_s:
     la t5, IMAGEM_JOGADOR		        # pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
     sw t1, 0(t5)			            # coloca o endereco de t1 no endereco de t5
 
+    ## EVENTO: COLETA PONTO
+    COLETA_PONTO_BAIXO:
+    li t2, 8
+    bne s3, t2, MOVIMENTA_JOGADOR_BAIXO
+    la t1, PONTOS
+    lw t2, 0(t1)
+    addi t2, t2, 1
+    sw t2, 0(t1)
+
     MOVIMENTA_JOGADOR_BAIXO:
     li t2, 4
     sb t2, 0(s1)    # Movimenta o JOGADOR
-
     addi s1, s1, -20	# Retira offset
     li t2, 0        	# Pegue o valor 0
     sb t2, 0(s1)    	# Apague rastro do Jogador
-
     sw t0, 0(s0)    # Atualiza POSICAO_JOGADOR
-
     j MOVIMENTA_INIMIGOS	
 
 CASO_TECLA_d:
@@ -239,7 +254,7 @@ CASO_TECLA_d:
 
     ## EVENTO: POWERUP FORCA ##
     li t2, 6
-    bne s3, t2, MOVIMENTA_JOGADOR_DIREITA
+    bne s3, t2, COLETA_PONTO_DIREITA
     la t1, BOOLEANO_FORCA
     li t2, 1
     sw t2, 0(t1)
@@ -247,6 +262,15 @@ CASO_TECLA_d:
     la t1, IMAGEM_JOGADOR_FORCA_direita	# pega o endereco de "IMAGEM_JOGADOR_direita" e coloca em t1
     la t5, IMAGEM_JOGADOR		        # pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
     sw t1, 0(t5)			            # coloca o endereco de t1 no endereco de t5
+
+    ## EVENTO: COLETA PONTO
+    COLETA_PONTO_DIREITA:
+    li t2, 8
+    bne s3, t2, MOVIMENTA_JOGADOR_DIREITA
+    la t1, PONTOS
+    lw t2, 0(t1)
+    addi t2, t2, 1
+    sw t2, 0(t1)
 
     MOVIMENTA_JOGADOR_DIREITA:
     # ANDA JOGADOR PARA A DIREITA
@@ -452,6 +476,7 @@ CASO_TECLA_P:
     j FIM_GAME_LOOP_FASE_1              # Encerra Game_Loop
 
 MOVIMENTA_INIMIGOS:     # Por enquanto ainda nao ha inimigos
+    ### Colocar inimigos ####
 
 FIM_ATUALIZA_TILEMAP:
 

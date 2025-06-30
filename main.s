@@ -138,6 +138,9 @@ INICIO_GAME_LOOP_FASE_1:
 
 	.include "ATUALIZA_TILEMAP.s"
 
+	#####################################################################################
+	######## Incrementar musica para receber vetor instrumento e volume #####################
+	#################################################################################
 	#.include "TOCA_MUSICA.s"
 
 	j INICIO_GAME_LOOP_FASE_1
@@ -151,6 +154,10 @@ FIM_GAME_LOOP_FASE_1:
 ######################################################
 # O intuito dessas funcoes eh diminuir o codigo para evitar problemas de salto (j, call)
 
+
+######################################################
+######## FUNCAO 1 #####################
+######################################################
 PRINTA_ALGARISMOS:
 		# Excecao para generalizar a funcao e 
 		# a reutilizar para imprimir pontos
@@ -282,6 +289,10 @@ PRINTA_ALGARISMOS:
 
 FIM_PRINTA_ALGARISMOS:
     ret
+
+######################################################
+######## FUNCAO 2 #####################
+######################################################
 
 LOOP_TILEMAP_OBJETO:
 		lui t4, 0xFF000			# Carrega os 20 bits mais a esquerda de t4 com ENDERECO_INICIAL_FRAME : Nesse caso do Frame 0
