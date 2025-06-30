@@ -65,6 +65,36 @@ CONFIGURA_FASE_1:
 	# sw t0, 0(s2)	# Inicializa: TEMPO_INICIAL_MUSICA = TEMPO_ATUAL
 
 ################################################
+###### Inicializa inimigos ##############
+################################################
+	la t0, POSICAO_INIMIGOS
+	li t1, 59
+	sw t1, 0(t0)	# Posicao do primeiro inimigo
+	
+	li t1, 79
+	sw t1, 1(t0)	# Posicao do segundo inimigo
+	
+	la t0, OFFSET_INIMIGOS
+	li t1, -1
+	sw t1, 0(t0)	# Offset do primeiro inimigo
+	
+	li t1, -1
+	sw t1, 1(t0)	# Offset do segundo inimigo
+
+	la t5, IMAGEM_INIMIGOS
+	la t1, IMAGEM_INIMIGO_1
+	sw t1, 0(t5)	# Imagem do primeiro inimigo
+
+	la t1, IMAGEM_INIMIGO_2
+	sw t1, 4(t5)	# Imagem do segundo inimigo
+
+	# # Inicializa TEMPO_INICIAL_POWER_UP_FORCA
+	# la s2, TEMPO_INICIAL_POWER_UP_FORCA
+	# li t0, -1
+	# sw t0, 0(s2)	# Inicializa: TEMPO_INICIAL_MUSICA = TEMPO_ATUAL
+
+
+################################################
 ###### Inicializa todos os scores ##############
 ################################################
 	.include "INICIALIZA_SCORES.s"
