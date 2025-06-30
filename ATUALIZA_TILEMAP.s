@@ -43,7 +43,7 @@ CASO_TECLA_w:
 
     ## EVENTO: POWERUP FORCA ##
     li t2, 6
-    bne s3, t2, MOVIMENTA_JOGADOR_CIMA
+    bne s3, t2, COLETA_PONTO_CIMA
     la t1, BOOLEANO_FORCA
     li t2, 1
     sw t2, 0(t1)
@@ -51,6 +51,16 @@ CASO_TECLA_w:
     la t1, IMAGEM_JOGADOR_FORCA_cima	# pega o endereco de "IMAGEM_JOGADOR_cima" e coloca em t1
     la t5, IMAGEM_JOGADOR		        # pega o endereco de "IMAGEM_JOGADOR" e coloca em t5
     sw t1, 0(t5)			            # coloca o endereco de t1 no endereco de t5
+    j MOVIMENTA_JOGADOR_CIMA
+
+    ## EVENTO: COLETA PONTO
+    COLETA_PONTO_CIMA:
+    li t2, 8
+    bne s3, t2, MOVIMENTA_JOGADOR_CIMA
+    la t1, PONTOS
+    lw t2, 0(t1)
+    addi t2, t2, 1
+    sw t2, 0(t1)
 
     MOVIMENTA_JOGADOR_CIMA:
     # Movimento em TILEMAP
