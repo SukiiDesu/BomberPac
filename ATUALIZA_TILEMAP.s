@@ -324,7 +324,42 @@ MOVIMENTA_JOGADOR:
 
     j MOVIMENTA_INIMIGOS
 
-MOVIMENTA_INIMIGOS:     # Por enquanto ainda nao ha inimigos
-    ### Colocar inimigos ####
+MOVIMENTA_INIMIGOS:
+	
+	# # # Movimenta Inimigos
+	# la s5 POSICAO_INIMIGOS
+
+	# la t0, FASE_ATUAL
+	# lw t0, 0(t0)
+	# li t2, 1
+	# bne t0, t2, INIMIGO_TIPO_2
+
+	# # Movimentacao do Inimigo Tipo 1 (Linhas Horizontais ou Verticais)
+	# li s6, 0
+	# la s8, QUANTIDADE_DE_INIMIGOS
+	# lb s8, 0(s8)
+	# LOOP_MOVIMENTA_INIMIGOS:
+	# 	beq s6, s8, FIM_LOOP_MOVIMENTA_INIMIGOS
+	# 	lw t5, 0(s7) 
+	# 	lw t0, 0(s5)
+	# 	call RenderizacaoDinamica
+	# 	addi s5, s5, 4
+
+	# 	addi s6, s6, 1
+	# 	j LOOP_MOVIMENTA_INIMIGOS
+	# FIM_LOOP_RENDERIZA_INIMIGOS:
+
+
+	# INIMIGO_TIPO_2:
+	# # Movimentacao do Inimigo Tipo 1 (Offset randomizado apos colisao)
+
+
+	# # SWITCH - OFFSET_INIMIGO
+
+	# # Atualiza Frames de Inimigos
+	# # la s7 IMAGEM_INIMIGOS
+	# li s6, 0
+	# li s8, 2
+	# 	addi s7, s7, 4
 
 FIM_ATUALIZA_TILEMAP:

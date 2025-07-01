@@ -14,6 +14,10 @@
 	li t1, 1
     sw t1, 0(t0)
 
+    la t0, QUANTIDADE_DE_INIMIGOS
+	li t1, 2
+    sb t1, 0(t0)
+
 	j CONFIGURA_FASE_1
 
 PASSA_FASE_2:
@@ -169,7 +173,8 @@ INICIO_GAME_LOOP_FASE_1:
 	la s5 POSICAO_INIMIGOS
 	la s7 IMAGEM_INIMIGOS
 	li s6, 0
-	li s8, 2
+	la s8, QUANTIDADE_DE_INIMIGOS
+	lb s8, 0(s8)
 	LOOP_RENDERIZA_INIMIGOS:
 		beq s6, s8, FIM_LOOP_RENDERIZA_INIMIGOS
 		lw t5, 0(s7) 
@@ -210,7 +215,7 @@ INICIO_GAME_LOOP_FASE_1:
 	#####################################################################################
 	######## Incrementar musica para receber vetor instrumento e volume #####################
 	#################################################################################
-	#.include "TOCA_MUSICA.s"
+	.include "TOCA_MUSICA.s"
 
 	j INICIO_GAME_LOOP_FASE_1
 
