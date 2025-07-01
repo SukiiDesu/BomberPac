@@ -15,7 +15,7 @@
     sw t1, 0(t0)
 
     la t0, QUANTIDADE_DE_INIMIGOS
-	li t1, 2
+	li t1, 4
     sb t1, 0(t0)
 
 	j CONFIGURA_FASE_1
@@ -92,6 +92,12 @@ CONFIGURA_FASE_1:
 	
 	li t1, 178
 	sw t1, 4(t0)	# Posicao do segundo inimigo
+
+	li t1, 270
+	sw t1, 8(t0)	# Posicao do segundo inimigo
+
+	li t1, 269
+	sw t1, 12(t0)	# Posicao do segundo inimigo
 	
 	la t0, OFFSET_INIMIGOS
 	li t1, -1
@@ -101,11 +107,17 @@ CONFIGURA_FASE_1:
 	sb t1, 1(t0)	# Offset do segundo inimigo
 
 	la t5, IMAGEM_INIMIGOS
-	la t1, IMAGEM_INIMIGO_1
+	la t1, IMAGEM_FANTASMA_ESQUERDA
 	sw t1, 0(t5)	# Imagem do primeiro inimigo
 
-	la t1, IMAGEM_INIMIGO_2
+	la t1, IMAGEM_FANTASMA_ESQUERDA
 	sw t1, 4(t5)	# Imagem do segundo inimigo
+
+	la t1, IMAGEM_FANTASMA_ESQUERDA
+	sw t1, 8(t5)	# Imagem do segundo inimigo
+
+	la t1, IMAGEM_FANTASMA_ESQUERDA
+	sw t1, 12(t5)	# Imagem do segundo inimigo
 
 	# # Inicializa TEMPO_INICIAL_POWER_UP_FORCA
 	# la s2, TEMPO_INICIAL_POWER_UP_FORCA
@@ -167,8 +179,10 @@ INICIO_GAME_LOOP_FASE_1:
 	# # RENDERIZAÇOES DINAMICAS #
 	# ####################################
 
-	.include "RENDERIZA_CAMPO.s"
+	# li t0, 800
+	# call Espera
 
+	.include "RENDERIZA_CAMPO.s"
 	## Renderiza Inimigos
 	la s5 POSICAO_INIMIGOS
 	la s7 IMAGEM_INIMIGOS

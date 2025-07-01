@@ -7,7 +7,7 @@
 	###################
 	## SWITCH LETRAS ##
 	###################
-	li t2, 'w'		            				# Pegue o valor 'w' na tabela ASCII	
+	li t2, 'w'		            			# Pegue o valor 'w' na tabela ASCII	
     bne s0, t2, CASO_TECLA_a				# Se a tecla pressionada nao foi 'w'
 		# Atualiza ULTIMA_TECLA_PRESSIONADA
 		la t2, ULTIMA_TECLA_PRESSIONADA
@@ -247,7 +247,7 @@ MOVIMENTA_JOGADOR:
 	######################################################
     la s0, POSICAO_JOGADOR		# Pegue endereco POSICAO_ATUAL_JOGADOR
     lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
-    add t0, t0, s5            # Adicone o offset
+    add t0, t0, s5            	# Adicone o offset
 
     lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
     add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
@@ -261,7 +261,7 @@ MOVIMENTA_JOGADOR:
 
     ## EVENTO: POWERUP FORCA ##
     li t2, 6
-    bne s3, t2, COLETA_PONTO
+    bne s3, t2, COLISAO_INIMIGO
 
 		# Ativa PowerUp Forca
 		la t1, BOOLEANO_FORCA
@@ -294,6 +294,37 @@ MOVIMENTA_JOGADOR:
 			la s6, IMAGEM_JOGADOR_FORCA_direita
 			sw s6, 0(t5)
 			j ATUALIZA_JOGADOR
+
+	## EVENTO: COLISAO COM INIMIGO
+	COLISAO_INIMIGO:
+		la t3, POSICAO_INIMIGOS		# Pegue endereco do vetor POSICAO_INIMIGOS
+		
+		# Inicializa indices do loop
+		li s4, 0
+		la s6, QUANTIDADE_DE_INIMIGOS
+		lb s6, 0(s6)
+
+		LOOP_CONFERE_COLISAO_INIMIGO:
+			beq s4, s6, COLETA_PONTO
+				lw t2, 0(t3)
+
+				# li a7, 4
+				# la a0, DEBUG_MSG
+				# ecall
+
+				bne t0, t2, ITERA_LOOP_CONFERE_COLISAO_INIMIGO
+
+				la t2, VIDAS
+				lw t4, 0(t2)
+				addi t4, t4, -1
+				sw t4, 0(t2)
+
+				J ATUALIZA_JOGADOR
+
+			ITERA_LOOP_CONFERE_COLISAO_INIMIGO:
+				addi s4, s4, 1
+				addi t3, t3, 4
+				j LOOP_CONFERE_COLISAO_INIMIGO
 
     ## EVENTO: COLETA PONTO
     COLETA_PONTO:
@@ -342,7 +373,10 @@ MOVIMENTA_INIMIGOS:
 	# 	beq s6, s8, FIM_LOOP_MOVIMENTA_INIMIGOS
 	# 	lw t5, 0(s7) 
 	# 	lw t0, 0(s5)
+	#	li t1, -1
+	#	beq t0, t1, PULA_RENDERIZACAO	#Verifica se o inimigo estah morto
 	# 	call RenderizacaoDinamica
+	#   PULA_RENDERIZACAO:
 	# 	addi s5, s5, 4
 
 	# 	addi s6, s6, 1

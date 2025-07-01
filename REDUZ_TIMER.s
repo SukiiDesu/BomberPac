@@ -1,3 +1,7 @@
+	la t0, VIDAS  # Pega o endereco de SCORE_TIMER
+	lw t0, 0(t0)        # Pega o conteudo de SCORE_TIMER
+	beqz t0, FIM_GAME_LOOP_FASE_1   # Se SCORE_TIMER == 0 -> Encerre a Fase
+
 	la t0, SCORE_TIMER  # Pega o endereco de SCORE_TIMER
 	lw t0, 0(t0)        # Pega o conteudo de SCORE_TIMER
 	beqz t0, FIM_GAME_LOOP_FASE_1   # Se SCORE_TIMER == 0 -> Encerre a Fase
