@@ -307,8 +307,8 @@ MOVIMENTA_JOGADOR:
     ATUALIZA_JOGADOR:
 		# Preenche o espaco com o "conteudo" jogador
 		## Gambiarra para evitar flick de renderizacao ##
-		li t2, 4
-		sb t2, 0(s1)
+		# li t2, 4
+		# sb t2, 0(s1)
 
     	# MOVIMENTA O JOGADOR #
 		# Inverte o Offset
