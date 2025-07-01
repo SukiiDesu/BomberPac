@@ -17,6 +17,17 @@
 	j CONFIGURA_FASE_1
 
 PASSA_FASE_2:
+	# Apaga o HUD #
+	li t0, 0
+	li s6, 19
+	LOOP_ESVAZIA_HUD:
+		beq t0, s6, FIM_ESVAZIA_HUD
+			la t5, IMAGEM_2
+			call LOOP_TILEMAP_OBJETO
+			addi t0, t0, 1
+			j LOOP_ESVAZIA_HUD
+	FIM_ESVAZIA_HUD:
+
 	la t0, FASE_2
 	la t1, TILEMAP_MUTAVEL
 	sw t0, 0(t1)
@@ -56,7 +67,7 @@ CONFIGURA_FASE_1:
 	sw t1, 0(t5)
 
 	la t1, BOOLEANO_FORCA
-	li t5, 1
+	li t5, 0
 	sw t5, 0(t1)
 
 	# # Inicializa TEMPO_INICIAL_POWER_UP_FORCA
@@ -68,18 +79,18 @@ CONFIGURA_FASE_1:
 ###### Inicializa inimigos ##############
 ################################################
 	la t0, POSICAO_INIMIGOS
-	li t1, 59
+	li t1, 158
 	sw t1, 0(t0)	# Posicao do primeiro inimigo
 	
-	li t1, 79
-	sw t1, 1(t0)	# Posicao do segundo inimigo
+	li t1, 178
+	sw t1, 4(t0)	# Posicao do segundo inimigo
 	
 	la t0, OFFSET_INIMIGOS
 	li t1, -1
-	sw t1, 0(t0)	# Offset do primeiro inimigo
+	sb t1, 0(t0)	# Offset do primeiro inimigo
 	
 	li t1, -1
-	sw t1, 1(t0)	# Offset do segundo inimigo
+	sb t1, 1(t0)	# Offset do segundo inimigo
 
 	la t5, IMAGEM_INIMIGOS
 	la t1, IMAGEM_INIMIGO_1
@@ -149,7 +160,28 @@ INICIO_GAME_LOOP_FASE_1:
 	# ####################################
 
 	.include "RENDERIZA_CAMPO.s"
-	.include "RENDERIZA_JOGADOR.s"
+
+	## Renderiza Jogador
+	la t0, POSICAO_JOGADOR
+	lw t0, 0(t0)
+	lw t5, IMAGEM_JOGADOR
+	call LOOP_TILEMAP_OBJETO
+
+	## Renderiza Inimigos
+	la s5 POSICAO_INIMIGOS
+	la s7 IMAGEM_INIMIGOS
+	li s6, 0
+	li s8, 2
+	LOOP_RENDERIZA_INIMIGOS:
+		beq s6, s8, FIM_LOOP_RENDERIZA_INIMIGOS
+		lw t5, 0(s7) 
+		lw t0, 0(s5)
+		call LOOP_TILEMAP_OBJETO
+		addi s5, s5, 4
+		addi s7, s7, 4
+		addi s6, s6, 1
+		j LOOP_RENDERIZA_INIMIGOS
+	FIM_LOOP_RENDERIZA_INIMIGOS:
 
 	# Troca/Inverte Frames
 	li t0, 0xFF200604	# Pega endereco de SELECAO_DE_FRAME_EXIBIDO
