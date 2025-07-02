@@ -191,7 +191,8 @@ lw t1, 0(t1)				# Pegue o valor do Power Up
 		li t2, 106		            # Pegue o valor 'j' na tabela ASCII	
 		bne s0, t2, CASO_TECLA_L	# Se a tecla pressionada nao foi 'j'
 
-			## Verifica se ja hÃ¡ uma bomba
+
+			## Verifica se ja tem uma bomba
 			li t2, 0
 
 			# Pega o endereco e posicao da bomba
@@ -240,6 +241,7 @@ lw t1, 0(t1)				# Pegue o valor do Power Up
 
 			li t2, 8                          
 			bne s3, t2, MOVIMENTA_INIMIGOS    # Nova posicao disponivel para colocar bomba (Vazio)
+
 
 			# salva posicao da bomba
 			la t2, POSICAO_BOMBA
