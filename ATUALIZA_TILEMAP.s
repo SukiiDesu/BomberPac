@@ -2,7 +2,7 @@
 	## LOOP CHECKAR BOMBA ##
 	########################
 
-	la t0, POSICAO_BOMBA		# Verifica se hÃ¡ uma bomba
+	la t0, POSICAO_BOMBA		# Verifica se tem uma bomba
 	lw t0, 0(t0)
 	li t1, 0
 	bne t0, t1, SWITCH_LETRAS	
@@ -191,7 +191,7 @@ lw t1, 0(t1)				# Pegue o valor do Power Up
 		li t2, 106		            # Pegue o valor 'j' na tabela ASCII	
 		bne s0, t2, CASO_TECLA_L	# Se a tecla pressionada nao foi 'j'
 
-			## Verifica se ja hÃ¡ uma bomba
+			## Verifica se ja tem uma bomba
 			li t2, 0
 
 			# Pega o endereco e posicao da bomba
