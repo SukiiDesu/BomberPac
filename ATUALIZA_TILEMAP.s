@@ -2,7 +2,7 @@
 	## LOOP CHECKAR BOMBA ##
 	########################
 
-	la t0, POSICAO_BOMBA		# Verifica se hÃ¡ uma bomba
+	la t0, POSICAO_BOMBA		# Verifica se tem uma bomba
 	lw t0, 0(t0)
 	li t1, 0
 	bne t0, t1, SWITCH_LETRAS	
