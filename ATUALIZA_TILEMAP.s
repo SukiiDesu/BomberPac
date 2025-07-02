@@ -64,7 +64,7 @@
 
 	CASO_TECLA_x:
 		li t2, 120		            # Pegue o valor 'L' na tabela ASCII	
-		bne s0, t2, CASO_TECLA_L	# Se a tecla pressionada nao foi 'K'
+		bne s0, t2, CASO_TECLA_j	# Se a tecla pressionada nao foi 'K'
 			# Confere se POWERUP FORCA estah ativo
 			la t1, BOOLEANO_FORCA
 			lw t1, 0(t1)
@@ -116,6 +116,56 @@
 			call DestroiTijolo
 			j MOVIMENTA_INIMIGOS
 
+	CASO_TECLA_j:
+		li t2, 106		            # Pegue o valor 'j' na tabela ASCII	
+		bne s0, t2, CASO_TECLA_L	# Se a tecla pressionada nao foi 'j'
+
+			# Verifica a direcao que o Jogador esta olhando
+			la t2, ULTIMA_TECLA_PRESSIONADA
+			lw t1, 0(t2)
+
+			# Pega posicao do jogador
+			la s0, POSICAO_JOGADOR		# Pegue endereco POSICAO_ATUAL_JOGADOR
+			lw t0, 0(s0)                # Pegue conteudo POSICAO_ATUAL_JOGADOR
+
+			# Caso esteja olhando para cima
+			li t2, 'w'
+			bne t1, t2, CASO_BOMBA_ESQUERDA
+			addi t0, t0, -20                # Adicone o offset
+			j COLISAO_CHECK
+
+			# Caso esteja olhando para esquerda
+			CASO_BOMBA_ESQUERDA:
+			li t2, 'a'
+			bne t1, t2, CASO_BOMBA_BAIXO
+			addi t0, t0, -1                # Adicone o offset
+			j COLISAO_CHECK
+
+			# Caso esteja olhando para baixo
+			CASO_BOMBA_BAIXO:
+			li t2, 's'
+			bne t1, t2, CASO_BOMBA_DIREITA
+			addi t0, t0, 20                # Adicone o offset
+			j COLISAO_CHECK
+
+			# Caso esteja olhando para direita
+			CASO_BOMBA_DIREITA:
+			li t2, 'd'
+			bne t1, t2, MOVIMENTA_INIMIGOS
+			addi t0, t0, 1        	   # Adicone o offset
+			
+			COLISAO_CHECK:
+			lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
+			add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
+			lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
+
+			li t2, 8                          
+			bne s3, t2, MOVIMENTA_INIMIGOS    # Nova posicao disponivel para colocar bomba (Vazio)
+
+			## COLOCAR A BOMBA ##
+			li t2, 7
+			sb t2, 0(s1)    # Coloca a Bomba
+    
 
 # 	CASO_TECLA_K:
 # 		li t2, 'K'		            # Pegue o valor 'L' na tabela ASCII	
@@ -257,6 +307,8 @@ MOVIMENTA_JOGADOR:
     li t2, 1                            # Pegue o valor 1
     beq s3, t2, MOVIMENTA_INIMIGOS    # Conteudo na nova posicao eh Bloco indestrutivel (Pilastra)
     li t2, 3                            # Pegue o valor 3
+    beq s3, t2, MOVIMENTA_INIMIGOS    # Conteudo na nova posicao eh Bloco destrutivel (Tijolo)
+    li t2, 7                            # Pegue o valor 3
     beq s3, t2, MOVIMENTA_INIMIGOS    # Conteudo na nova posicao eh Bloco destrutivel (Tijolo)
 
     ## EVENTO: POWERUP FORCA ##
