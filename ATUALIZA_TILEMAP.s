@@ -4,38 +4,52 @@
 
 	la t0, POSICAO_BOMBA		# Verifica se tem uma bomba
 	lw t0, 0(t0)
-	li t1, 0
-	bne t0, t1, SWITCH_LETRAS	
+	 
+	li s2, 0
+		beq t0, s2, SWITCH_LETRAS	
 		la t2, SCORE_TIMER		# Inicializa SCORE_TIMER e TEMPO_INICIAL_BOMBA para comparar
 		lw t2, 0(t2)
-		la t1, TEMPO_INICIAL_BOMBA
-		lw t1, 0(t1)
+		la s2, TEMPO_INICIAL_BOMBA
+		lw s2, 0(s2)
 
 		# Verifica se a bomba ja pode explodir
-		addi t1, t1, -2				# Se ja passou 2 segundos
-		blt t1, t2, SWITCH_LETRAS
-			addi t0, t0, -21
+		addi s2, s2, -2				# Se ja passou 2 segundos
+		blt s2, t2, SWITCH_LETRAS
+		addi t0, t0, -21
 
 
-		li t1, 0				# Inicializa contador de blocos para iterar
+		li s2, 0				# Inicializa contador de blocos para iterar
 		LOOP_DESTROI_BLOCO:
 	
-			li t2, 3			
-			addi t1, t1, 1
+			addi s2, s2, 1
 
 			lw s1, TILEMAP_MUTAVEL  # Pegue endereco inicial do TILEMAP
 			add s1, s1, t0          # Pegue endereco da matriz ao redor da bomba
 			lb s3, 0(s1)            # Pegue conteudo da matriz
 
+			li t2, 3	
 			beq s3, t2, EXPLODE_BLOCO	# Se o espaco checado eh um tijolo pula pra EXPLODE_BLOCO
+			
+			li t2, 8                          
+			bne s3, t2, ITERA_EXPLOSAO    # Nova posicao disponivel para colocar bomba (Vazio)
+			
+			
+			la t1, PONTOS
+			lw t2, 0(t1)
+			addi t2, t2, 1
+			sw t2, 0(t1)
+			
+			li t2, 0
+			sb t2, 0(s1)
 
-			li t2, 3
-			rem t2, t1, t2
-			li t3, 0
-			beq t2, t3, PROX_LINHA		# Se o indice atual passou de linha pula pra PROX_LINHA
-
-			addi t0, t0, 1		# Vai para a proxima posicao
-			j LOOP_DESTROI_BLOCO
+			ITERA_EXPLOSAO:
+				li t2, 3
+				rem t2, s2, t2
+				li t3, 0
+				beq t2, t3, PROX_LINHA		# Se o indice atual passou de linha pula pra PROX_LINHA
+			
+				addi t0, t0, 1		# Vai para a proxima posicao
+				j LOOP_DESTROI_BLOCO
 
 
 		EXPLODE_BLOCO:
@@ -43,7 +57,7 @@
 			call DestroiTijolo		# Quebra o bloco
 
 			li t2, 3
-			rem t2, t1, t2
+			rem t2, s2, t2
 			li t3, 0
 			beq t2, t3, PROX_LINHA		# Se o indice atual passou de linha pula pra PROX_LINHA
 
@@ -52,7 +66,7 @@
 		
 		PROX_LINHA:
 			li t2, 9
-			beq t1, t2, DELETA_BOMBA	# Se a bomba nao acabou de checar
+			beq s2, t2, DELETA_BOMBA	# Se a bomba nao acabou de checar
 			addi t0, t0, 18				# Vai para a proxima linha
 			j LOOP_DESTROI_BLOCO
 		
@@ -62,8 +76,11 @@
 			lw s1, TILEMAP_MUTAVEL		# Inicializa TILEMAP_MUTAVEL
 			add s1, s1, t0				# s1 += posicao da bomba
 
-			li t2, 1
+			li t2, 0
 			sb t2, 0(s1)
+			
+			la t0, POSICAO_BOMBA		# Verifica se tem uma bomba
+			sw t2, 0(t0)
 
 
 SWITCH_LETRAS:
@@ -238,23 +255,30 @@ lw t1, 0(t1)				# Pegue o valor do Power Up
 			add s1, s1, t0          # Pegue endereco da matriz POSICAO_ATUAL_JOGADOR + OFFSET
 			lb s3, 0(s1)            # Pegue conteudo da matriz POSICAO_ATUAL_JOGADOR + OFFSET
 
+			li t2, 0             
+			beq s3, t2, POE_BOMBA    # Nova posicao disponivel para colocar bomba (Vazio)
+			
 			li t2, 8                          
 			bne s3, t2, MOVIMENTA_INIMIGOS    # Nova posicao disponivel para colocar bomba (Vazio)
-
-			# salva posicao da bomba
-			la t2, POSICAO_BOMBA
-			sw s1, 0(t2)
-
-			# salva tempo inicial da bomba
-			la t1, SCORE_TIMER
-			lw t1, 0(t1)
-			la t2, TEMPO_INICIAL_BOMBA
-			sw t1, 0(t2)
-
-			## COLOCAR A BOMBA ##
-			li t2, 7
-			sb t2, 0(s1)    # Coloca a Bomba
+			
+			la t1, PONTOS
+			lw t2, 0(t1)
+			addi t2, t2, 1
+			sw t2, 0(t1)
     
+			POE_BOMBA:
+			la s0, POSICAO_BOMBA
+			sw t0, 0(s0)
+			
+			li t2, 7
+			sb t2, 0(s1)		
+			
+			la s0, TEMPO_INICIAL_BOMBA
+			la s1, SCORE_TIMER	
+			lw s1, 0(s1)
+			sw s1, 0(s0)
+			
+			j MOVIMENTA_INIMIGOS
 
 # 	CASO_TECLA_K:
 # 		li t2, 'K'		            # Pegue o valor 'L' na tabela ASCII	
