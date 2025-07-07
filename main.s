@@ -86,6 +86,10 @@ CONFIGURA_FASE_1:
 ################################################
 ###### Inicializa inimigos ##############
 ################################################
+	la t0, POSICAO_BOMBA
+	li t1, 0
+	sw t1, 0(t0)
+
 	la t0, POSICAO_INIMIGOS
 	li t1, 158
 	sw t1, 0(t0)	# Posicao do primeiro inimigo
